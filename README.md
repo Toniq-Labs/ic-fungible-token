@@ -1,17 +1,17 @@
 # ic-fungible-token
-Basic Fungible/Stackable Token Standard for the IC. Find below the specification, types used and entrypoints. In future, we want to also explore a secondary more advanced token standard that aligns more with Ethereum's ERC1155 (multi-token standard)
+Basic Fungible/Stackable Token Standard for the IC. Find below the specification, types used and entry points. In future, we want to also explore a secondary more advanced token standard that aligns more with Ethereum's ERC1155 (multi-token standard)
 
 ## Rationale
 There are a number of proposed standards for tokens on the IC - below is my proposal for a **basic fungible token**. Find below listed the core differences between this token standard and others proposed, as well as my rationale:
 
 1. We use the **AccountIdentifier** as unique token addresses as it better matches with what is being used throughout the ecosystem (exchanges and NNS).
-2. This standard is based on **Ethereum's ERC20** as more developers would be use to this standard, improving developer adoption 
-3. We removed the **approve call in-favour of the increase/decrease Allowance**. This is a well known issue with the ERC20 standard, and non-standard calls were added. Instead of adding a broken call from the outset, we'll go straight to the improved allowance model.
+2. This standard is based on **Ethereum's ERC20** as more developers would be accustomed to this standard, improving developer adoption 
+3. We removed the **approve call in-favour of the increase/decrease Allowance**. This is a well-known issue with the ERC20 standard, and non-standard calls were added. Instead of adding a broken call from the outset, we'll go straight to the improved allowance model.
 4. All metadata has been moved to a **single Metadata type** to keep like data together in a single object, and allow for an additional `metadata()` call.
 5. For allowances, we store the **Principal as the spender** as opposed to the AccountIdentifier due to the way addresses work on the IC
 
 ## Interface Specification
-The ic-fungible-token standard requires the following data types/public entry points:
+The ic-fungible-token standard requires the following public entry points:
 
 ```
 type Token = actor {
@@ -45,7 +45,7 @@ type Token = actor {
 ```
 type AccountIdentifier = AID.AccountId;
 ```
-An accountidentifier represents a unique identifier for a users account, and matches that used across the ICP ecosystem (e.g. by exchanges and the NNS). It is made up of a users Principal and a 256-bit number representing an SubAccount. 
+An accountidentifier represents a unique identifier for a user's account, and matches that used across the ICP ecosystem (e.g. by exchanges and the NNS). It is made up of a user's Principal and a 256-bit number representing an SubAccount. 
 
 ### SubAccount
 ```
@@ -63,7 +63,7 @@ type Metadata = {
   symbol : Text;
 };
 ```
-This type contains all metadata related to this token, and the above constitutes the minimum expected fields to abide by this standard. This allows external consumers to provide userfriendly experiences to end users.
+This type contains all metadata related to this token, and the above constitutes the minimum expected fields to abide by this standard. This allows external consumers to provide user-friendly experiences to end users.
 
 ### Balance
 ```
@@ -73,7 +73,7 @@ Simple type to represent an amount of the token (e.g. amount to send or an exist
 
 ## Entry Points
 
-The following entry poinnts must be supported to allow other canisters and 3rd-party consumers the ability to better integrate with the given token.
+The following entry points must be supported to allow other canisters and 3rd-party consumers the ability to better integrate with the given token.
 
 ### Query Calls
 
@@ -109,7 +109,7 @@ Returns the balance of how many tokens `spender` can transfer on behalf of `owne
 
 **`transfer: shared (subaccount : ?SubAccount, recipient : AccountIdentifier, amount : Balance) -> async Bool;`**
 
-Generates an AccountIdentifier based on the caller's Principal and the provided SubAccount*, and then attemps to transfer `amount` from the generated AccountIdentifier to `recipient`, and returns the outcome as a bool.
+Generates an AccountIdentifier based on the caller's Principal and the provided SubAccount*, and then attempts to transfer `amount` from the generated AccountIdentifier to `recipient`, and returns the outcome as a bool.
 
 <sub>* If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).</sub>
 
