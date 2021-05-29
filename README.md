@@ -6,7 +6,7 @@ There are a number of proposed standards for tokens on the IC - below is my prop
 
 1. We use the **AccountIdentifier** as unique token addresses as it better matches with what is being used throughout the ecosystem (exchanges and NNS).
 2. This standard is based on **Ethereum's ERC20** as more developers would be accustomed to this standard, improving developer adoption 
-3. We removed the **approve call in-favour of the increase/decrease Allowance**. This is a well-known issue with the ERC20 standard, and non-standard calls were added. Instead of adding a broken call from the outset, we'll go straight to the improved allowance model.
+3. Dropped the **approve call in-favour of the increase/decrease Allowance**. This is a well-known issue with the ERC20 standard, and non-standard calls were added. Instead of adding a broken call from the outset, we'll go straight to the improved allowance model.
 4. All metadata has been moved to a **single Metadata type** to keep like data together in a single object, and allow for an additional `metadata()` call.
 5. For allowances, we store the **Principal as the spender** as opposed to the AccountIdentifier due to the way addresses work on the IC
 
