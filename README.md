@@ -1,14 +1,14 @@
 # ic-fungible-token
-Basic Fungible/Stackable Token Standard for the IC. This does not allow for multiple transfers in a single transaction
+Basic Fungible/Stackable Token Standard for the IC. Find below the specification, types used and entrypoints. In future, we want to also explore a secondary more advanced token standard that aligns more with Ethereum's ERC1155 (multi-token standard)
 
 ## Rationale
-There are a number of proposed standards for tokens on the IC - below is my proposal for a basic fungible token. Find below listed the core differences between this token standard and others proposed, as well as my rationale:
+There are a number of proposed standards for tokens on the IC - below is my proposal for a **basic fungible token**. Find below listed the core differences between this token standard and others proposed, as well as my rationale:
 
-1. I have decided to use the **AccountIdentifier** as unique token addresses as it better aligns with what is being used throughout the ecosystem (exchanges and NNS).
-2. I have decided to align this standard to be closer to **Ethereum's ERC20** as more developers would be use to this standard, improving developer adoption 
-3. I have removed the **approve call in-favour of the increase/decrease Allowance**. This is a well known issue with the ERC20 standard, and non-standard calls were added. Instead of adding a broken call from the outset, we'll go straight to the improved allowance model.
-4. All metadata has been moved to a single Metadata type to keep like data together in a single object.
-5. For allowances, we store the Principal as the spender (as these will be the actual canister callers).
+1. We use the **AccountIdentifier** as unique token addresses as it better matches with what is being used throughout the ecosystem (exchanges and NNS).
+2. This standard is based on **Ethereum's ERC20** as more developers would be use to this standard, improving developer adoption 
+3. We removed the **approve call in-favour of the increase/decrease Allowance**. This is a well known issue with the ERC20 standard, and non-standard calls were added. Instead of adding a broken call from the outset, we'll go straight to the improved allowance model.
+4. All metadata has been moved to a **single Metadata type** to keep like data together in a single object, and allow for an additional `metadata()` call.
+5. For allowances, we store the **Principal as the spender** as opposed to the AccountIdentifier due to the way addresses work on the IC
 
 ## Interface Specification
 The ic-fungible-token standard requires the following data types/public entry points:
