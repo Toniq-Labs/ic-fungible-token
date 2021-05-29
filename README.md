@@ -111,7 +111,7 @@ Returns the balance of how many tokens `spender` can transfer on behalf of `owne
 
 Generates an AccountIdentifier based on the caller's Principal and the provided SubAccount*, and then attemps to transfer `amount` from the generated AccountIdentifier to `recipient`, and returns the outcome as a bool.
 
-*If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).*
+<sub>* If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).</sub>
 
 **`transferFrom: shared (sender : AccountIdentifier, recipient : AccountIdentifier, amount : Balance) -> async Bool;`**
 
@@ -121,10 +121,10 @@ Asserts that the caller is approved to send `amount`, and then attempts to trans
 
 Generates an AccountIdentifier based on the caller's Principal and the provided SubAccount*, and then attempts to increase the allowance of the `spender` by `amount` for the generated AccountIdentifier, and then returns the outcome a bool.
 
-*If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).*
+<sub>* If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).</sub>
 
 **`decreaseAllowance: shared (spender : Principal, subaccount : ?SubAccount, amount : Balance) -> async Bool;`**
 
 Generates an AccountIdentifier based on the caller's Principal and the provided SubAccount*, and then attempts to decrease the allowance of the `spender` by `amount` for the generated AccountIdentifier, and then returns the outcome a bool.
 
-*If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).*
+<sub>* If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).</sub>
