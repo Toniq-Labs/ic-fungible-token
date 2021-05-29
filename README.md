@@ -45,7 +45,7 @@ type Token = actor {
 ```
 type AccountIdentifier = AID.AccountId;
 ```
-An accountidentifier represents a unique identifier for a user's account, and matches that used across the ICP ecosystem (e.g. by exchanges and the NNS). It is made up of a user's Principal and a 256-bit number representing an SubAccount. 
+An Accountidentifier represents a unique identifier for a user's account, and matches that used across the ICP ecosystem (e.g. by exchanges and the NNS). It is made up of a user's Principal and a 256-bit number representing a SubAccount. Ths comes fro the [motoko-accountid library](https://github.com/stephenandrews/motoko-accountid)
 
 ### SubAccount
 ```
