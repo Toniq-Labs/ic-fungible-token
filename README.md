@@ -15,13 +15,7 @@ The ic-fungible-token standard requires the following data types/public entry po
 
 ```
 type Token = actor {
-  balanceOf: query (who : AccountIdentifier) -> async Balance;
-  
-  allowance: query (owner : AccountIdentifier, spender : Principal) -> async Balance;
-
-  metadata: query () -> async Metadata;
-
-  name: query () -> async Tet;
+  name: query () -> async Text;
 
   symbol: query () -> async Text;
 
@@ -29,9 +23,15 @@ type Token = actor {
 
   totalSupply: query () -> async Balance;
 
-  transfer: shared (subaccount : ?SubAccount, to : AccountIdentifier, amount : Balance) -> async Bool;
+  metadata: query () -> async Metadata;
+  
+  balanceOf: query (who : AccountIdentifier) -> async Balance;
+  
+  allowance: query (owner : AccountIdentifier, spender : Principal) -> async Balance;
 
-  transferFrom: shared (from : AccountIdentifier, to : AccountIdentifier, amount : Balance) -> async Bool;
+  transfer: shared (subaccount : ?SubAccount, recipient : AccountIdentifier, amount : Balance) -> async Bool;
+
+  transferFrom: shared (sender : AccountIdentifier, recipient : AccountIdentifier, amount : Balance) -> async Bool;
 
   increaseAllowance: shared (spender : Principal, subaccount : ?SubAccount, amount : Balance) -> async Bool;
 
@@ -73,50 +73,58 @@ Simple type to represent an amount of the token (e.g. amount to send or an exist
 
 ## Entry Points
 
+The following entry poinnts must be supported to allow other canisters and 3rd-party consumers the ability to better integrate with the given token.
+
 ### Query Calls
 
-**balanceOf (AccountIdentifier) -> Balance**
+**`name: query () -> async Text;`**
 
-Takes single input who (AccountIdentifier) and returns the current balance for who
+Returns the stored name of the token
 
-**allowance (AccountIdenfitier, Principal) -> Balance**
+**`symbol: query () -> async Text;`**
 
-Takes input owner (AccountIdenfitier) and spender (Principal) and returns the balance of how many tokens spender can transfer on behalf of owner.
+Returns the stored symbol of the token 
 
-**metadata () -> Metadata**
+**`decimals: query () -> async Nat8;`**
 
-Takes no input and returns metadata for the token
+Returns the stored number of decimals of the token
 
-**name () -> Text**
+**`totalSupply: query () -> async Balance;`**
 
-Takes no input and returns the stored name of the token
+Returns the stored token supply of the token
 
-**symbol () -> Text**
+**`metadata: query () -> async Metadata;`**
 
-Takes no input and returns the stored symbol of the token 
+Returns all metadata for the token
 
-**decimals () -> Nat8**
+**`balanceOf: query (who : AccountIdentifier) -> async Balance;`**
 
-Takes no input and returns the stored number of decimals of the token
+Returns the balance of `who`.
 
-**totalSupply () -> Nat**
+**`allowance: query (owner : AccountIdentifier, spender : Principal) -> async Balance;`**
 
-Takes no input and returns the stored token supply of the token
+Returns the balance of how many tokens `spender` can transfer on behalf of `owner`.
 
 ### Update Calls
 
-**transfer (?SubAccount, AccountIdentifier, Balance) -> Bool**
+**`transfer: shared (subaccount : ?SubAccount, recipient : AccountIdentifier, amount : Balance) -> async Bool;`**
 
-Generates a from address based on the caller's Principal and the provided SubAccount. If SubAccount is null, we use the default account (SUB_ACCOUNT_ZERO). We then attemp to transfer Balance from the users address to the specified AccountIdentifier.
+Generates an AccountIdentifier based on the caller's Principal and the provided SubAccount*, and then attemps to transfer `amount` from the generated AccountIdentifier to `recipient`, and returns the outcome as a bool.
 
-**transferFrom (AccountIdentifier/from, AccountIdentitifer/to, Balance) -> Bool**
+*If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).*
 
-Attempt to transfer Balance from the from account to the to account. The caller must be approved to send the Balance.
+**`transferFrom: shared (sender : AccountIdentifier, recipient : AccountIdentifier, amount : Balance) -> async Bool;`**
 
-**increaseAllowance (Principal, ?SubAccount, Balance) -> Bool**
+Asserts that the caller is approved to send `amount`, and then attempts to transfer `amount` from `sender` to `recipient`, and returns the outcome as a bool. 
 
-Generates a from address based on the caller's Principal and the provided SubAccount. If SubAccount is null, we use the default account (SUB_ACCOUNT_ZERO). We then increases the allowance of the spender (Principal) by Balance. This is a safe call that will only ever increase allowance.
+**`increaseAllowance: shared (spender : Principal, subaccount : ?SubAccount, amount : Balance) -> async Bool;`**
 
-**decreaseAllowance (Principal, ?SubAccount, Balance) -> Bool**
+Generates an AccountIdentifier based on the caller's Principal and the provided SubAccount*, and then attempts to increase the allowance of the `spender` by `amount` for the generated AccountIdentifier, and then returns the outcome a bool.
 
-Generates a from address based on the caller's Principal and the provided SubAccount. If SubAccount is null, we use the default account (SUB_ACCOUNT_ZERO). We then decrease the allowance of the spender (Principal) by Balance. This is a safe call that will only ever decrease allowance.
+*If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).*
+
+**`decreaseAllowance: shared (spender : Principal, subaccount : ?SubAccount, amount : Balance) -> async Bool;`**
+
+Generates an AccountIdentifier based on the caller's Principal and the provided SubAccount*, and then attempts to decrease the allowance of the `spender` by `amount` for the generated AccountIdentifier, and then returns the outcome a bool.
+
+*If SubAccount is null, we use the default sub account (SUBACCOUNT_ZERO).*
